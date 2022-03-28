@@ -1,4 +1,4 @@
-module ex02
+module ex03
 
 go 1.13
 

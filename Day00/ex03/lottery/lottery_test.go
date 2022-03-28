@@ -5,10 +5,14 @@ import (
 	"github.com/stretchr/testify/assert"
   )
   
-  func Testnumbers(t *testing.T) {
+
+  func TestAnswer(t *testing.T) {
   
-	var a string = "eeee";
-	var b string = "Bienvenue sur GoLang!\n"
+	for i:=0; i < 1000 ; i++ { 
+		number := Answer();
+		assert.Condition(t, func() bool {if number >= 0 || number <= 99 {
+			return true; }
+		return false;},  "out of bound")
+	}
   
-	assert.Equal(t, a, b, "The two words should be the same.")
   }
