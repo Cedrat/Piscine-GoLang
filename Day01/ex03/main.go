@@ -5,6 +5,6 @@ import (
 )
 
 func main() {
-	// palindrom.Palindrom("", "l" , "le", "lev", "leve", "level" , "leveli" , "😀😁");
-	palindrom.Palindrom("😀😁");
+	palindrom.Palindrom("", "l" , "le", "lev", "leve", "level" , "leveli" , "😀😁");
+	// palindrom.Palindrom("😀😁");
 }
