@@ -1,7 +1,7 @@
 package coubang
 
 import (
-	"ex03/product"
+	"ex04/product"
 	// "fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"

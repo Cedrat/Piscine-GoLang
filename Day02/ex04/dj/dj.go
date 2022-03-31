@@ -1,7 +1,7 @@
 package dj
 
 import (
-	"ex02/product"
+	"ex04/product"
 	"fmt"
 )
 
