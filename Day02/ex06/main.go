@@ -19,5 +19,6 @@ func main() {
 	a.Pop()
 	a.Pop()
 	a.Pop()
+	a.Display()
 
 }
