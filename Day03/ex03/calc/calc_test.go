@@ -28,5 +28,5 @@ func TestDivBy0(T *testing.T) {
 		assert.Equal(int8(i%128), c.Count())
 	}
 
-	c.Run(10, 0)
+	assert.Equal(MaxInt, c.Run(10, 0))
 }

@@ -2,6 +2,8 @@ package calc
 
 import "fmt"
 
+const MaxInt = int(^uint(0) >> 1)
+
 type Calculator struct {
 	f   func(a, b int) int
 	cnt int8
@@ -35,22 +37,25 @@ func (calc *Calculator) Count() int8 {
 	return calc.cnt
 }
 
-func (calc *Calculator) Run(a, b int) int {
+func (calc *Calculator) Run(a, b int) (ret int) {
+
 	defer func() {
 		if err := recover(); err != nil {
 			if b == 0 {
 				fmt.Println("Div or Mod by zero")
+				ret = MaxInt
 			}
 			if calc.cnt < 0 {
 				calc.cnt = 0
 			}
 		}
 	}()
-
 	calc.cnt++
+	ret = calc.f(a, b)
+
 	if calc.cnt < 0 {
-		panic("Embedder counter overflow")
+		panic("Embedded counter overflow")
 	}
 
-	return calc.f(a, b)
+	return ret
 }
