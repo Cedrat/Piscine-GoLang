@@ -35,19 +35,12 @@ func (p *Printer) Wrapper(f func(w io.Writer)) (s func(w io.Writer)) {
 	nb_fix := 0
 
 	return func(w io.Writer) {
-		defer func() {
-			if err := recover(); err != nil {
-				p.cnt = -1
-				nb_fix++
-				fmt.Fprintln(w, p.Name+" : "+"printer is fixed", nb_fix, "time")
-			}
-
-		}()
-		fmt.Print(p.Name + " : ")
-		f(w)
-		if p.cnt == 3 {
-			panic("")
+		if err := recover(); err != nil {
+			p.cnt = 0
+			nb_fix++
+			fmt.Fprintln(w, p.Name+": "+"printer is fixed", nb_fix, "times")
 		}
-
+		fmt.Fprint(w, p.Name+": ")
+		f(w)
 	}
 }
