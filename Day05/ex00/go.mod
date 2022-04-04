@@ -1,8 +1,5 @@
-module ex03
+module ex00
 
-<<<<<<< HEAD
-go 1.13
-=======
 go 1.18
 
 require (
@@ -11,4 +8,3 @@ require (
 	github.com/stretchr/testify v1.7.1 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c // indirect
 )
->>>>>>> dd9148fbdf63edb01390c95b5616944b2f046d84

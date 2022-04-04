@@ -2,7 +2,7 @@ package coubang
 
 import (
 	"errors"
-	"ex03/product"
+	"ex04/product"
 	"fmt"
 )
 
