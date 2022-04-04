@@ -42,7 +42,7 @@ func TestDict(T *testing.T) {
 	definition, err = dict.Read("Earth")
 
 	assert.Equal("Word Not Found", err.Error())
-	assert.Equal("*dict.DictError", fmt.Sprintf("%T", err), "Need to be dict.DictError type")
+	assert.Equal("dict.DictError", fmt.Sprintf("%T", err), "Need to be dict.DictError type")
 	assert.Equal("The word Earth isn't in the dictionnary",
 		definition,
 		"Need to be equal")

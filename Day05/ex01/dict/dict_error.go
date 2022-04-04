@@ -1,21 +1,19 @@
 package dict
 
-type DictError struct {
-	msg string
-}
+type DictError string
 
-func New(text string) error {
-	return &DictError{text}
-}
+// func New(text string) error {
+// 	return &DictError{text}
+// }
 
-var (
-	ErrorNotFound     = New("Word Not Found")
-	ErrorAlreadyExist = New("Word Already Exist")
-	ErrorDoesNotExist = New("Word Does Not Exist")
-	ErrorNoRemovable  = New("Word Cannot Be Removed")
+const (
+	ErrorNotFound     = DictError("Word Not Found")
+	ErrorAlreadyExist = DictError("Word Already Exist")
+	ErrorDoesNotExist = DictError("Word Does Not Exist")
+	ErrorNoRemovable  = DictError("Word Cannot Be Removed")
 )
 
-func (e *DictError) Error() string {
+func (e DictError) Error() string {
 
-	return e.msg
+	return string(e)
 }
