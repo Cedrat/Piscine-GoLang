@@ -7,10 +7,10 @@ type Ft_queue struct {
 }
 
 type little_element struct {
-	element interface{}
+	element Any
 }
 
-func Newlittle_element(brick interface{}) (little_element, error) {
+func Newlittle_element(brick Any) (little_element, error) {
 	var a little_element
 
 	a.element = brick
@@ -18,7 +18,7 @@ func Newlittle_element(brick interface{}) (little_element, error) {
 	return a, nil
 }
 
-func (queue *Ft_queue) Push(a interface{}) {
+func (queue *Ft_queue) Push(a Any) {
 	b, _ := Newlittle_element(a)
 	queue.under_queue = append(queue.under_queue, b)
 
@@ -35,7 +35,7 @@ func (queue *Ft_queue) Len() int {
 	return len(queue.under_queue)
 }
 
-func (queue *Ft_queue) Pop() interface{} {
+func (queue *Ft_queue) Pop() Any {
 	if queue.Len() == 0 {
 		return nil
 	}
