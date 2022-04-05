@@ -17,7 +17,7 @@ const (
 )
 
 type Success struct {
-	Success bool
+	Success bool `json:"Success"`
 }
 
 type KeyValue struct {
@@ -38,12 +38,16 @@ var GetRequest = http.HandlerFunc(
 	func(writer http.ResponseWriter, req *http.Request) {
 		key := req.FormValue("WORD")
 		val, err := g_dict.Read(key)
-		// fmt.Fprint(writer, val)
+		encoder := json.NewEncoder(writer)
+		var success Success
 		if err != nil {
 			writer.WriteHeader(http.StatusNotFound)
+			success = Success{false}
 		} else {
 			fmt.Fprint(writer, val)
 		}
+		encoder.Encode(&success)
+		// writer.Write([]byte(success))
 	},
 )
 
@@ -52,8 +56,12 @@ var PostRequest = http.HandlerFunc(
 		var data KeyValue
 		decoder := json.NewDecoder(req.Body)
 		decoder.Decode(&data)
-		fmt.Fprintln(writer, data)
-		g_dict.Create(data.Key, data.Value)
+		err := g_dict.Create(data.Key, data.Value)
+		if err != nil {
+			writer.WriteHeader(http.StatusBadRequest)
+		} else {
+			writer.WriteHeader(http.StatusCreated)
+		}
 	},
 )
 
@@ -62,8 +70,11 @@ var PutRequest = http.HandlerFunc(
 		var data KeyValue
 		decoder := json.NewDecoder(req.Body)
 		decoder.Decode(&data)
-		fmt.Fprintln(writer, data)
-		g_dict.Update(data.Key, data.Value)
+		err := g_dict.Update(data.Key, data.Value)
+
+		if err != nil {
+			writer.WriteHeader(http.StatusBadRequest)
+		}
 	},
 )
 
@@ -72,9 +83,7 @@ var DeleteRequest = http.HandlerFunc(
 		key := req.FormValue("WORD")
 		err := g_dict.Delete(key)
 		if err != nil {
-			// fmt.Fprint(writer, err.Error())
-			writer.WriteHeader(http.StatusNotFound)
-
+			writer.WriteHeader(http.StatusBadRequest)
 		}
 	},
 )
