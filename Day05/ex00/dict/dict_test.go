@@ -13,22 +13,22 @@ func stringDico(word string, define string) string {
 func TestDict(T *testing.T) {
 	assert := assert.New(T)
 
-	var dict map[string]string
+	dict := make(map[string]string)
 
 	Create(dict, "Earth", "is a planet")
 	Create(dict, "Earth", "is a cat")
 
-	assert.Equal(Read(dict, "Earth"),
-		stringDico("Earth", "is a planet"),
+	assert.Equal(stringDico("Earth", "is a planet"),
+		Read(dict, "Earth"),
 		"Need to be equal")
 
 	Update(dict, "Earth", "Earth is a blue planet")
-	assert.Equal(Read(dict, "Earth"),
-		stringDico("Earth", "Earth is a blue planet"),
+	assert.Equal(stringDico("Earth", "Earth is a blue planet"),
+		Read(dict, "Earth"),
 		"Need to be equal")
 
 	Delete(dict, "Earth")
-	assert.Equal(Read(dict, "Earth"),
-		"The word Earth isn't in the dictionnary",
+	assert.Equal("The word Earth isn't in the dictionnary",
+		Read(dict, "Earth"),
 		"Need to be equal")
 }

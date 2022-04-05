@@ -1,6 +1,7 @@
 package router
 
 import (
+	"encoding/json"
 	"ex02/dict"
 	"fmt"
 	"log"
@@ -11,34 +12,70 @@ import (
 )
 
 const (
-	port = "4242"
+	port = "6505"
 	ip   = "localhost"
 )
 
+type Success struct {
+	Success bool
+}
+
 type KeyValue struct {
-	Key   string
-	Value string
+	Key   string `json:"Key"`
+	Value string `json:"Value"`
 }
 
 var (
 	g_dict = dict.NewDict()
 )
 
+// func GetMiddleware(next http.Handler) http.Handler {
+// 	return
+// 	http.Error(w)
+// }
+
 var GetRequest = http.HandlerFunc(
 	func(writer http.ResponseWriter, req *http.Request) {
 		key := req.FormValue("WORD")
-		g_dict.Read(key)
-		fmt.Fprint(writer, key)
+		val, err := g_dict.Read(key)
+		// fmt.Fprint(writer, val)
+		if err != nil {
+			writer.WriteHeader(http.StatusNotFound)
+		} else {
+			fmt.Fprint(writer, val)
+		}
 	},
 )
 
 var PostRequest = http.HandlerFunc(
 	func(writer http.ResponseWriter, req *http.Request) {
-		// var data KeyValue
-		// // fmt.Fprintln(writer, req.Body)
-		// decoder := json.NewDecoder(req.Body)
-		// decoder.Decode(&data)
-		fmt.Fprintln(writer, req.FormValue("d"))
+		var data KeyValue
+		decoder := json.NewDecoder(req.Body)
+		decoder.Decode(&data)
+		fmt.Fprintln(writer, data)
+		g_dict.Create(data.Key, data.Value)
+	},
+)
+
+var PutRequest = http.HandlerFunc(
+	func(writer http.ResponseWriter, req *http.Request) {
+		var data KeyValue
+		decoder := json.NewDecoder(req.Body)
+		decoder.Decode(&data)
+		fmt.Fprintln(writer, data)
+		g_dict.Update(data.Key, data.Value)
+	},
+)
+
+var DeleteRequest = http.HandlerFunc(
+	func(writer http.ResponseWriter, req *http.Request) {
+		key := req.FormValue("WORD")
+		err := g_dict.Delete(key)
+		if err != nil {
+			// fmt.Fprint(writer, err.Error())
+			writer.WriteHeader(http.StatusNotFound)
+
+		}
 	},
 )
 
@@ -47,6 +84,8 @@ func Handler() http.Handler {
 	// router.Methods("GET")
 	router.Handle("/dict", GetRequest).Methods("GET")
 	router.Handle("/dict", PostRequest).Methods("POST")
+	router.Handle("/dict", PutRequest).Methods("PUT")
+	router.Handle("/dict", DeleteRequest).Methods("DELETE")
 
 	return router
 }
