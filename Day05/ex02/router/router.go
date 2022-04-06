@@ -38,30 +38,34 @@ var GetRequest = http.HandlerFunc(
 	func(writer http.ResponseWriter, req *http.Request) {
 		key := req.FormValue("WORD")
 		val, err := g_dict.Read(key)
-		encoder := json.NewEncoder(writer)
-		var success Success
+
 		if err != nil {
 			writer.WriteHeader(http.StatusNotFound)
-			success = Success{false}
 		} else {
 			fmt.Fprint(writer, val)
 		}
-		encoder.Encode(&success)
-		// writer.Write([]byte(success))
 	},
 )
 
 var PostRequest = http.HandlerFunc(
 	func(writer http.ResponseWriter, req *http.Request) {
+
 		var data KeyValue
 		decoder := json.NewDecoder(req.Body)
 		decoder.Decode(&data)
+
+		encoder := json.NewEncoder(writer)
+		var success Success
+
 		err := g_dict.Create(data.Key, data.Value)
 		if err != nil {
 			writer.WriteHeader(http.StatusBadRequest)
+			success = Success{false}
 		} else {
 			writer.WriteHeader(http.StatusCreated)
+			success = Success{true}
 		}
+		encoder.Encode(&success)
 	},
 )
 
@@ -72,9 +76,16 @@ var PutRequest = http.HandlerFunc(
 		decoder.Decode(&data)
 		err := g_dict.Update(data.Key, data.Value)
 
+		encoder := json.NewEncoder(writer)
+		var success Success
+
 		if err != nil {
 			writer.WriteHeader(http.StatusBadRequest)
+			success = Success{false}
+		} else {
+			success = Success{true}
 		}
+		encoder.Encode(success)
 	},
 )
 
@@ -82,9 +93,17 @@ var DeleteRequest = http.HandlerFunc(
 	func(writer http.ResponseWriter, req *http.Request) {
 		key := req.FormValue("WORD")
 		err := g_dict.Delete(key)
+
+		encoder := json.NewEncoder(writer)
+		var success Success
+
 		if err != nil {
 			writer.WriteHeader(http.StatusBadRequest)
+			success = Success{false}
+		} else {
+			success = Success{true}
 		}
+		encoder.Encode(success)
 	},
 )
 
