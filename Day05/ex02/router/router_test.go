@@ -35,10 +35,6 @@ func CreateRequest(method string, url string) *http.Response {
 	return res
 }
 
-// func EncodeKeyValueToJson(key string, value string) {
-// 	pair := KeyValue{key, value}
-// }
-
 func CreatePostPutRequest(method string, req_url string, key string, value string) *http.Response {
 	client := &http.Client{}
 
